@@ -3,18 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-        <variable
-            name="viewModel"
-            type="com.chessytrooper.retailbusinessapp.viewmodel.ProductViewModel" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        
+
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/materialToolbar2"
+            android:id="@+id/materialToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#3F51B5"
@@ -24,29 +18,41 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:titleTextColor="@color/white"
-            app:title="Retail Products"
+            app:title="Shopping Cart"
             app:titleCentered="true" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_constraintBottom_toTopOf="@+id/openCartButton"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/totalPriceTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/materialToolbar2"
-            app:spanCount="2" />
+            app:layout_constraintTop_toBottomOf="@+id/materialToolbar" />
 
-        <Button
-            android:id="@+id/openCartButton"
+        <TextView
+            android:id="@+id/totalPriceTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="View Cart"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="16dp"
+            android:text="TextView"
+            android:padding="16dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/checkoutButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="Checkout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
-

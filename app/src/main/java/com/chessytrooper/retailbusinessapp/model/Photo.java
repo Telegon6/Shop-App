@@ -1,6 +1,8 @@
 package com.chessytrooper.retailbusinessapp.model;
 
-public class Photo {
+import java.io.Serializable;
+
+public class Photo implements Serializable {
     private String url;
 
     // Getter and setter

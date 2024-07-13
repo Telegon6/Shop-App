@@ -1,11 +1,12 @@
 package com.chessytrooper.retailbusinessapp.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
-public class Price {
+public class Price implements Serializable {
     @SerializedName("NGN")
     private List<Object> ngn;
 
