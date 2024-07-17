@@ -50,7 +50,7 @@ public class Product implements Serializable {
         return photos;
     }
 
-        public String getNgnPrice() {
+    public String getNgnPrice() {
         if (currentPrice != null && !currentPrice.isEmpty()) {
             Double price = currentPrice.get(0).getFirstNgnPrice();
             if (price != null) {

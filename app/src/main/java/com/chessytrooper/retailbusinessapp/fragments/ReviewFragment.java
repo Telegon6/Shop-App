@@ -16,11 +16,6 @@ import android.widget.TextView;
 import com.chessytrooper.retailbusinessapp.CheckoutActivity;
 import com.chessytrooper.retailbusinessapp.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ReviewFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ReviewFragment extends Fragment {
 
     private TextView totalPriceTextView;

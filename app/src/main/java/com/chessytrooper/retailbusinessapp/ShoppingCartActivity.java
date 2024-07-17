@@ -44,16 +44,12 @@ public class ShoppingCartActivity extends AppCompatActivity
             }
         });
 
-        Intent intent = getIntent();
-        if (intent.hasExtra("cartItems")) {
-            shoppingCart = (List<Product>) intent.getSerializableExtra("cartItems");
-            if (shoppingCart != null && !shoppingCart.isEmpty()) {
-                adapter = new ShoppingCartAdapter(shoppingCart, this, this);
-                recyclerView.setAdapter(adapter);
-                updateTotalPrice();
-            } else {
-                showEmptyCartMessage();
-            }
+        List<Product> cartItems = CartManager.getCartItems();
+        shoppingCart = cartItems;
+        if (shoppingCart != null && !shoppingCart.isEmpty()) {
+            adapter = new ShoppingCartAdapter(shoppingCart, this, this);
+            recyclerView.setAdapter(adapter);
+            updateTotalPrice();
         } else {
             showEmptyCartMessage();
         }
