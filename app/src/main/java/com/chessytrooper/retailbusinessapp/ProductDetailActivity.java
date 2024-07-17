@@ -1,15 +1,15 @@
 package com.chessytrooper.retailbusinessapp;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.chessytrooper.retailbusinessapp.model.Product;
@@ -19,6 +19,13 @@ public class ProductDetailActivity extends AppCompatActivity {
     private TextView productNameTextView, productDescriptionTextView, productPriceTextView;
     private Button addToCartButton;
     private Product product;
+
+    private BroadcastReceiver cartUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateCartButtonStatus();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +47,20 @@ public class ProductDetailActivity extends AppCompatActivity {
         addToCartButton.setOnClickListener(v -> toggleCartStatus());
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter("com.chessytrooper.retailbusinessapp.CART_UPDATED");
+        registerReceiver(cartUpdateReceiver, filter);
+        updateCartButtonStatus();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(cartUpdateReceiver);
+    }
+
     private void displayProductDetails() {
         productNameTextView.setText(product.getName());
         productDescriptionTextView.setText(product.getDescription());
@@ -58,9 +79,9 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private void toggleCartStatus() {
         if (CartManager.isProductInCart(product)) {
-            CartManager.removeFromCart(product);
+            CartManager.removeFromCart(this, product);
         } else {
-            CartManager.addToCart(product);
+            CartManager.addToCart(this, product);
         }
         updateCartButtonStatus();
     }

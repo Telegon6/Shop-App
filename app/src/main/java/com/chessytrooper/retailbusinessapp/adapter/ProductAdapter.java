@@ -46,6 +46,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.productDescription.setText(product.getDescription());
         holder.productPrice.setText("Price: $" + product.getNgnPrice());
 
+        // Set progress based on available quantity
+        int maxQuantity = 50;
+        int progress = (product.getStock() * 50) / maxQuantity;
+        holder.productProgress.setProgress(progress);
+
         if (product.getPhotos() != null && !product.getPhotos().isEmpty()) {
             Glide.with(holder.productImage.getContext())
                     .load("https://api.timbu.cloud/images/" + product.getPhotos().get(0).getUrl())
@@ -71,9 +76,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     private void toggleCartStatus(Button button, Product product) {
         if (CartManager.isProductInCart(product)) {
-            CartManager.removeFromCart(product);
+            CartManager.removeFromCart(context, product);
         } else {
-            CartManager.addToCart(product);
+            CartManager.addToCart(context, product);
         }
         updateCartButtonStatus(button, product);
     }
@@ -95,6 +100,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         TextView productName, productDescription, productPrice;
         ImageView productImage;
         Button addToCartButton;
+        ProgressBar productProgress;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -103,6 +109,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             productPrice = itemView.findViewById(R.id.productPrice);
             productImage = itemView.findViewById(R.id.productImage);
             addToCartButton = itemView.findViewById(R.id.addToCartButton);
+            productProgress = itemView.findViewById(R.id.product_progress);
         }
     }
 }
