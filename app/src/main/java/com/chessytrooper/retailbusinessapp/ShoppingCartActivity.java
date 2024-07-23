@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ public class ShoppingCartActivity extends AppCompatActivity
     private static final int CHECKOUT_REQUEST = 2;
     private Button checkoutButton;
     private double totalPrice;
+    private static final String TAG = "ShoppingCartActivity";
 
     private BroadcastReceiver cartUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -71,7 +73,8 @@ public class ShoppingCartActivity extends AppCompatActivity
 
     private void updateCartItems() {
         shoppingCart.clear();
-        shoppingCart.addAll(CartManager.getCartItems());
+        shoppingCart.addAll(CartManager.getCartItems(this));
+        Log.d(TAG, "Cart items: " + shoppingCart.toString());
         adapter.notifyDataSetChanged();
         updateTotalPrice();
         updateEmptyCartView();
@@ -80,7 +83,13 @@ public class ShoppingCartActivity extends AppCompatActivity
     private void updateTotalPrice() {
         totalPrice = 0;
         for (Product product : shoppingCart) {
-            totalPrice += Double.parseDouble(product.getNgnPrice()) * product.getQuantity();
+            try {
+                double price = Double.parseDouble(product.getNgnPrice());
+                totalPrice += price * product.getQuantity();
+                Log.d(TAG, "Product: " + product.getName() + ", Price: " + product.getFirstNgnPrice() + ", Quantity: " + product.getQuantity());
+            } catch (NumberFormatException e) {
+                Log.e(TAG, "Error parsing price for product: " + product.getName() + ", Price string: " + product.getNgnPrice());
+            }
         }
         totalPriceTextView.setText(String.format("Total: $%.2f", totalPrice));
     }

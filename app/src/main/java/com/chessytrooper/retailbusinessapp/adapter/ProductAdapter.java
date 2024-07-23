@@ -75,7 +75,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
     private void toggleCartStatus(Button button, Product product) {
-        if (CartManager.isProductInCart(product)) {
+        if (CartManager.isProductInCart(context, product)) {
             CartManager.removeFromCart(context, product);
         } else {
             CartManager.addToCart(context, product);
@@ -84,7 +84,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
     private void updateCartButtonStatus(Button button, Product product) {
-        if (CartManager.isProductInCart(product)) {
+        if (CartManager.isProductInCart(context, product)) {
             button.setText("Remove from Cart");
         } else {
             button.setText("Add to Cart");

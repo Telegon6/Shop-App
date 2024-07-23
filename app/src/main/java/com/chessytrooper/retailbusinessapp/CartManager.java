@@ -2,36 +2,60 @@ package com.chessytrooper.retailbusinessapp;
 
 import android.content.Context;
 import android.content.Intent;
+import com.chessytrooper.retailbusinessapp.database.CartDatabaseHelper;
 import com.chessytrooper.retailbusinessapp.model.Product;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CartManager {
-    private static List<Product> cartItems = new ArrayList<>();
+    private static CartDatabaseHelper dbHelper;
+
+    public static void initializeDB(Context context) {
+        if (dbHelper == null) {
+            dbHelper = new CartDatabaseHelper(context.getApplicationContext());
+        }
+    }
 
     public static void addToCart(Context context, Product product) {
-        if (!isProductInCart(product)) {
+        initializeDB(context);
+        if (!isProductInCart(context, product)) {
             product.setQuantity(1);  // Set initial quantity to 1
-            cartItems.add(product);
+            dbHelper.addToCart(product);
             notifyCartUpdated(context);
         }
     }
 
     public static void removeFromCart(Context context, Product product) {
-        cartItems.removeIf(p -> p.getName().equals(product.getName()));
+        initializeDB(context);
+        dbHelper.removeFromCart(product);
         notifyCartUpdated(context);
     }
 
-    public static boolean isProductInCart(Product product) {
-        return cartItems.stream().anyMatch(p -> p.getName().equals(product.getName()));
-    }
-
-    public static List<Product> getCartItems() {
-        return new ArrayList<>(cartItems);
+    public static List<Product> getCartItems(Context context) {
+        initializeDB(context);
+        return dbHelper.getAllCartItems();
     }
 
     public static void clearCart(Context context) {
-        cartItems.clear();
+        initializeDB(context);
+        dbHelper.clearCart();
+        notifyCartUpdated(context);
+    }
+
+    // Add this method
+    public static boolean isProductInCart(Context context, Product product) {
+        initializeDB(context);
+        List<Product> cartItems = dbHelper.getAllCartItems();
+        for (Product cartItem : cartItems) {
+            if (cartItem.getName().equals(product.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void updateProductQuantity(Context context, Product product) {
+        initializeDB(context);
+        dbHelper.updateProductQuantity(product.getName(), product.getQuantity());
         notifyCartUpdated(context);
     }
 

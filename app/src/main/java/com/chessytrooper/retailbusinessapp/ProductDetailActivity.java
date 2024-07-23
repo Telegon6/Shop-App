@@ -78,7 +78,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void toggleCartStatus() {
-        if (CartManager.isProductInCart(product)) {
+        if (CartManager.isProductInCart(this, product)) {
             CartManager.removeFromCart(this, product);
         } else {
             CartManager.addToCart(this, product);
@@ -87,7 +87,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void updateCartButtonStatus() {
-        if (CartManager.isProductInCart(product)) {
+        if (CartManager.isProductInCart(this, product)) {
             addToCartButton.setText("Remove from Cart");
         } else {
             addToCartButton.setText("Add to Cart");

@@ -12,10 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chessytrooper.retailbusinessapp.CartManager;
 import com.chessytrooper.retailbusinessapp.CheckoutActivity;
+import com.chessytrooper.retailbusinessapp.database.CartDatabaseHelper;
 import com.chessytrooper.retailbusinessapp.R;
+import com.chessytrooper.retailbusinessapp.model.Order;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class ReviewFragment extends Fragment {
 
@@ -38,10 +45,24 @@ public class ReviewFragment extends Fragment {
     }
 
     private void confirmPurchase() {
-        // Here you would typically process the payment
-        // For this example, we'll just simulate a successful purchase
-        CartManager.clearCart(requireContext());
-        requireActivity().setResult(Activity.RESULT_OK);
-        requireActivity().finish();
+        // Create an Order object
+        Order order = new Order();
+        order.setDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date()));
+        order.setTotal(((CheckoutActivity) requireActivity()).getTotalPrice());
+        order.setItems(CartManager.getCartItems(requireContext()));
+
+        CartDatabaseHelper cartDatabaseHelper = new CartDatabaseHelper(requireContext());
+        // Add the order to the database
+        long orderId = cartDatabaseHelper.addOrder(order);
+
+        if (orderId != -1) {
+            // Order successfully added
+            CartManager.clearCart(requireContext());
+            requireActivity().setResult(Activity.RESULT_OK);
+            requireActivity().finish();
+        } else {
+            // Failed to add order
+            Toast.makeText(requireContext(), "Failed to place order", Toast.LENGTH_SHORT).show();
+        }
     }
 }

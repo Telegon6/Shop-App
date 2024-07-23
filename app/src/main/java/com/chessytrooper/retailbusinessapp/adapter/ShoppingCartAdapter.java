@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.chessytrooper.retailbusinessapp.CartManager;
 import com.chessytrooper.retailbusinessapp.R;
 import com.chessytrooper.retailbusinessapp.model.Product;
 
@@ -74,7 +75,8 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
             public void onClick(View v) {
                 int newQuantity = product.getQuantity() + 1;
                 product.setQuantity(newQuantity);
-                holder.productQuantity.setText("" + newQuantity);
+                holder.productQuantity.setText(String.valueOf(newQuantity));
+                CartManager.updateProductQuantity(holder.itemView.getContext(), product);
                 if (quantityChangedListener != null) {
                     quantityChangedListener.onQuantityChanged();
                 }
@@ -87,7 +89,8 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                 if (product.getQuantity() > 1) {
                     int newQuantity = product.getQuantity() - 1;
                     product.setQuantity(newQuantity);
-                    holder.productQuantity.setText("" + newQuantity);
+                    holder.productQuantity.setText(String.valueOf(newQuantity));
+                    CartManager.updateProductQuantity(holder.itemView.getContext(), product);
                     if (quantityChangedListener != null) {
                         quantityChangedListener.onQuantityChanged();
                     }
